@@ -1,0 +1,49 @@
+#
+# sudo scapy
+# capture = sniff(filter="arp", count=5)
+# capture.summary()
+# wrpcap(<filename>, capture)	# readable by wireshark
+# capture[0].pdfdump
+# hexdump(capture[0])	# doesn't seem to work
+# capture.hexdump()
+# capture[0].show()
+# ls(capture[0])
+# pkt.json()
+#
+# >>> capture.summary()
+# Ether / ARP who has 192.168.1.1 says 192.168.1.85 / Padding
+# Ether / ARP who has 169.254.245.15 says 169.254.245.15 / Padding
+# Ether / ARP who has 192.168.1.55 says 192.168.1.1
+# Ether / ARP is at f4:0f:24:34:86:48 says 192.168.1.55
+# Ether / ARP who has 169.254.245.15 says 169.254.245.15 / Padding
+# >>> 
+#
+# TypeError: 'Ether' object cannot be interpreted as an integer
+# >>> capture.hexdump()
+#
+0000 10:30:20.049514 Ether / ARP who has 192.168.1.1 says 192.168.1.85 / Padding
+0000  FF FF FF FF FF FF 28 57 67 39 EC 2A 08 06 00 01  ......(Wg9.*....
+0010  08 00 06 04 00 01 28 57 67 39 EC 2A C0 A8 01 55  ......(Wg9.*...U
+0020  00 00 00 00 00 00 C0 A8 01 01 00 00 00 00 00 00  ................
+0030  00 00 00 00 00 00 00 00 00 00 00 00              ............
+0001 10:30:30.903742 Ether / ARP who has 169.254.245.15 says 169.254.245.15 / Padding
+0000  FF FF FF FF FF FF 28 57 67 39 EC 2A 08 06 00 01  ......(Wg9.*....
+0010  08 00 06 04 00 01 28 57 67 39 EC 2A A9 FE F5 0F  ......(Wg9.*....
+0020  00 00 00 00 00 00 A9 FE F5 0F 00 00 00 00 00 00  ................
+0030  00 00 00 00 00 00 00 00 00 00 00 00              ............
+0002 10:30:50.854255 Ether / ARP who has 192.168.1.55 says 192.168.1.1
+0000  F4 0F 24 34 86 48 74 24 9F 9E A6 F8 08 06 00 01  ..$4.Ht$........
+0010  08 00 06 04 00 01 74 24 9F 9E A6 F8 C0 A8 01 01  ......t$........
+0020  00 00 00 00 00 00 C0 A8 01 37                    .........7
+0003 10:30:50.854321 Ether / ARP is at f4:0f:24:34:86:48 says 192.168.1.55
+0000  74 24 9F 9E A6 F8 F4 0F 24 34 86 48 08 06 00 01  t$......$4.H....
+0010  08 00 06 04 00 02 F4 0F 24 34 86 48 C0 A8 01 37  ........$4.H...7
+0020  74 24 9F 9E A6 F8 C0 A8 01 01                    t$........
+0004 10:31:01.008620 Ether / ARP who has 169.254.245.15 says 169.254.245.15 / Padding
+0000  FF FF FF FF FF FF 28 57 67 39 EC 2A 08 06 00 01  ......(Wg9.*....
+0010  08 00 06 04 00 01 28 57 67 39 EC 2A A9 FE F5 0F  ......(Wg9.*....
+0020  00 00 00 00 00 00 A9 FE F5 0F 00 00 00 00 00 00  ................
+0030  00 00 00 00 00 00 00 00 00 00 00 00              ............
+# >>> 
+#
+
