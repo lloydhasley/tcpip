@@ -1,5 +1,14 @@
-
-
+#
+# top level of emulator
+# only main(which handles cmd-line arguments is above)
+#
+# the various class modules are put together here:
+# rom, regfile, fifo.
+#
+# instr reads both the program and instructions from the
+# assembler output files
+#
+#
 
 from instr import Instr
 from exec import Execute
@@ -23,14 +32,12 @@ class TcpIp:
 
         self.execute = Execute(self.instr, self.bus, self.rom, verbose)
 
-        # global variables
+        # global variables (def and initialization)
         self.fifostatus = 0
         self.FRAME_DONE = 0
         self.enable = 0
         self.ADDR_SEND_FRAME = 0
         self.EatFrame = 0
 
-    def execute(self):
-        self.execute.execute()
-
-
+    def do_execute(self):
+        self.execute.execute()      # executes a single instruction

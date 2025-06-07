@@ -19,6 +19,11 @@ class Fifo:
 
         self.fifo_data = []
 
+    def write(self, word):
+        self.fifo_data.append(word)
+
+
+    # not used
     def stream_in(self, frame):
         # frame is a byte wide list
         # need to convert to 64 bit Axis style stream

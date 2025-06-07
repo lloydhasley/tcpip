@@ -1,6 +1,11 @@
 
-
-
+#
+# Emulates the 16-bit bus.
+#
+# supports both byte and word writes.
+# peripherals attach to the bus by specifying address rand and pointer to defining class
+#
+#
 class Bus:
     def __init__(self, verbose=0):
         self.devices = []
@@ -43,7 +48,3 @@ class Bus:
         if byte:
             data &= 0xff
         return data
-
-
-
-
