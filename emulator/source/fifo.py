@@ -15,13 +15,25 @@ class Fifo:
     POS_LAST = POS_KEEP + KEEP_WIDTH
     #
     def __init__(self, verbose=0):
-        self.verbost = verbose
+        self.verbose = verbose
 
         self.fifo_data = []
+        self.packet_count = 0
 
     def write(self, word):
         self.fifo_data.append(word)
+        if word >> Fifo.POS_LAST:
+            self.packet_count += 1
 
+    def flush_frame(self):
+        while True:
+            data = self.fifo_data.pop(0)
+            if data >> Fifo.POS_LAST:
+                self.packet_count -= 1
+                break
+
+    def status(self):
+        return self.packet_count > 0
 
     # not used
     def stream_in(self, frame):

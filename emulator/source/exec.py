@@ -35,10 +35,12 @@ class Execute:
         fcn(operand)
 
     def get_instr_fcn(self, instr_def):
-        print("entering get_instr_fcn")
+        print("entering get_instr_fcn aaa", instr_def)
+        print("instr_def", instr_def)
         for instr in instr_def:
             try:
-                fcn = getattr(self, instr['name'])
+                fcn_name = instr['handler']
+                fcn = getattr(self, fcn_name)
                 instr['fcn'] = fcn
             except:
                 print("Error: Cannot locate handler for: ", instr['name'])
@@ -154,13 +156,13 @@ class Execute:
         self.AR += (~operand) + 1
         self.AR &= 0xffff
 
-    def rotriW(self, operand):
+    def rotrIW(self, operand):
         if self.verbose & 1:
             print("ROTR,IW %02x" % operand)
 
         self.AR >>= operand
 
-    def rotliW(self, operand):
+    def rotlIW(self, operand):
         if self.verbose & 1:
             print("ROTL,IW %02x" % operand)
 

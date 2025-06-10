@@ -17,6 +17,10 @@ class Instr:
         lastcomment = ''
         fields = []
         instrs = []
+        LASTFIELD = 'handler'
+
+        print("reading: ", file_source)
+
         with open(file_source, 'r') as f:
             lines = f.readlines()
             for line in lines:
@@ -39,11 +43,15 @@ class Instr:
                     instr = {}
                     for i in range(1, len(tokens)):
                         field_name = fields[i]
-                        if i > 1:
+                        try:
                             tokens[i] = int(tokens[i])
+                        except:
+                            pass
                         instr[field_name] = tokens[i]
-                    if instr['cycles']:
+                    if instr[LASTFIELD] != '--':
                         instrs.append(instr)
+
+        print("number of instructions read: ", len(instrs))
         return instrs
 
     def instr_decodes(self, instrs):

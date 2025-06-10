@@ -64,7 +64,7 @@ class Net:
 
     # note mac ints are normal byte order
     # ((mac strs have LSB first)), we switch the bytes so LSB is in the low order bytes of the integer
-    def mac_str2int(mac_str):
+    def mac_str2int(self, mac_str):
         mac_addr = 0
 
         tokens = mac_str.split(':')
@@ -75,7 +75,7 @@ class Net:
         print(" mac str2int: %012x" % mac_addr)
         return mac_addr
 
-    def mac_int2str(mac_addr):
+    def mac_int2str(self, mac_addr):
         mac_str = ''
         for i in range(6):
             if mac_str != '':
@@ -84,7 +84,7 @@ class Net:
             mac_addr >>= 8
         return mac_str
 
-    def ip_int2str(ip_num):
+    def ip_int2str(self, ip_num):
         ip_str = ''
         for i in range(4):
             if ip_str != '':
@@ -95,7 +95,7 @@ class Net:
 
     # convert ip str of the form 192.168.1.4
     # to integer
-    def ip_str2int(ip_str):
+    def ip_str2int(self, ip_str):
         tokens = ip_str.split('.')
         ip_int = 0
         for i in range(len(tokens)):

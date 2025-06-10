@@ -30,34 +30,34 @@
 ; instruction definitions
 ;       if cycles=0 then not real instructions
 ;
-;       name       value   operand pos length  cycles
-inst    rom         0       2       16   0       0
-inst    org         0       1       16   0       0
-inst    nop         0       0       9  1       1
+;       name       value   operand pos length  cycles   handler
+inst    rom         0       2       16   0       0      --
+inst    org         0       1       16   0       0      --
+inst    nop         0       0       9   1       1       nop
 ;
-inst    lda.B       8       1       9  1       2
-inst    lda.W       9       1       9  1       2
-inst    ldi.B       10      1       9  1       1
-inst    ldi.W       11      1       9  1       1
-inst    sta.B       12      1       9  1       1
-inst    sta.W       13      1       9  1       1
+inst    lda.B       8       1       9   1       2       ldaB
+inst    lda.W       9       1       9   1       2       ldaW
+inst    ldi.B       10      1       9   1       1       ldiB
+inst    ldi.W       11      1       9   1       1       ldiW
+inst    sta.B       12      1       9   1       1       staB
+inst    sta.W       13      1       9   1       1       staW
 
-inst    subi.B      6       1       9  1       1
-inst    rotri.W     16      1       9  1       1
-inst    rotli.B     17      1       9  1       1
+inst    subi.B      6       1       9   1       1       subiB
+inst    rotri.W     16      1       9   1       1       rotriW
+inst    rotli.B     17      1       9   1       1       rotliB
 
-inst    xor.W       4       1       9  1       1
-inst    xori.B      5       1       9  1       1
+inst    xor.W       4       1       9   1       1       xorW
+inst    xori.B      5       1       9   1       1       xoriB
 
-inst    jnz         20       1       9  1       2
-inst    jz          21       1       9  1       2
-inst    jneg        22       1       9  1       2
-inst    jmp         24       1       9  1       2
-inst    jmp.I       25       1       9  1       3
+inst    jnz         20       1       9  1       2       jnz
+inst    jz          21       1       9  1       2       jz
+inst    jneg        22       1       9  1       2       jneg
+inst    jmp         24       1       9  1       2       jmp
+inst    jmp.I       25       1       9  1       3       jmpI
 
-inst    add.W       28      1       9  1       1
-inst    addi.W      29      1       9  1       1
-inst    add.WI      30      1       9  1       2
+inst    add.W       28      1       9  1       1        addW
+inst    addi.W      29      1       9  1       1        addIW
+inst    add.WI      30      1       9  1       2        addWI
 ;
 ; end of machine specification
 ;

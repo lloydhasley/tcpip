@@ -5,7 +5,9 @@
 ; check operands, register file versus immediate
 ;       immediate has 8bit limit, if exceeded place into regfile
 ;
-
+; change add-indirect to two instructions.  lda,I and addW
+;   ie make indirect more general purpose instruction
+;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
 ; tcp/ip frame processing;
@@ -28,34 +30,34 @@
 ; instruction definitions
 ;       if cycles=0 then not real instructions
 ;
-;       name       value   operand pos length  cycles
-inst    rom         0       2       16   0       0
-inst    org         0       1       16   0       0
-inst    nop         0       0       9  1       1
+;       name       value   operand pos length  cycles   handler
+inst    rom         0       2       16   0       0      --
+inst    org         0       1       16   0       0      --
+inst    nop         0       0       9   1       1       nop
 ;
-inst    lda.B       8       1       9  1       2
-inst    lda.W       9       1       9  1       2
-inst    ldi.B       10      1       9  1       1
-inst    ldi.W       11      1       9  1       1
-inst    sta.B       12      1       9  1       1
-inst    sta.W       13      1       9  1       1
+inst    lda.B       8       1       9   1       2       ldaB
+inst    lda.W       9       1       9   1       2       ldaW
+inst    ldi.B       10      1       9   1       1       ldiB
+inst    ldi.W       11      1       9   1       1       ldiW
+inst    sta.B       12      1       9   1       1       staB
+inst    sta.W       13      1       9   1       1       staW
 
-inst    subi.B      6       1       9  1       1
-inst    rotri.W     16      1       9  1       1
-inst    rotli.B     17      1       9  1       1
+inst    subi.B      6       1       9   1       1       subiB
+inst    rotri.W     16      1       9   1       1       rotrIW
+inst    rotli.W     17      1       9   1       1       rotlIW
 
-inst    xor.W       4       1       9  1       1
-inst    xori.B      5       1       9  1       1
+inst    xor.W       4       1       9   1       1       xorW
+inst    xori.B      5       1       9   1       1       xorIB
 
-inst    jnz         20       1       9  1       2
-inst    jz          21       1       9  1       2
-inst    jneg        22       1       9  1       2
-inst    jmp         24       1       9  1       2
-inst    jmp.I       25       1       9  1       3
+inst    jnz         20       1       9  1       2       jnz
+inst    jz          21       1       9  1       2       jz
+inst    jneg        22       1       9  1       2       jneg
+inst    jmp         24       1       9  1       2       jmp
+inst    jmp.I       25       1       9  1       3       jmpI
 
-inst    add.W       28      1       9  1       1
-inst    addi.W      29      1       9  1       1
-inst    add.WI      30      1       9  1       2
+inst    add.W       28      1       9  1       1        addW
+inst    addi.W      29      1       9  1       1        addIW
+inst    add.WI      30      1       9  1       2        addWI
 ;
 ; end of machine specification
 ;
@@ -95,17 +97,19 @@ Regs.Checksum           equ 0x030
 ;
 ; MAC layer frame field addresses (offsets into frame)
 ;
-RFifo.ADDR_MAC_DA_L   equ 0
-RFifo.ADDR_MAC_DA_M   equ 2
-RFifo.ADDR_MAC_DA_H   equ 4
-RFifo.ADDR_MAC_SA_L   equ 6
-RFifo.ADDR_MAC_SA_M   equ 8
-RFifo.ADDR_MAC_SA_H   equ 10
-RFifo.ADDR_MAC_TYPE   equ 12
-RFifo.ADDR_MAC_LEN    equ 14
+ADDR_MAC_START      equ Rfifo
+
+RFifo.ADDR_MAC_DA_L   equ ADDR_MAC_START + 0
+RFifo.ADDR_MAC_DA_M   equ ADDR_MAC_START + 2
+RFifo.ADDR_MAC_DA_H   equ ADDR_MAC_START + 4
+RFifo.ADDR_MAC_SA_L   equ ADDR_MAC_START + 6
+RFifo.ADDR_MAC_SA_M   equ ADDR_MAC_START + 8
+RFifo.ADDR_MAC_SA_H   equ ADDR_MAC_START + 10
+RFifo.ADDR_MAC_TYPE   equ ADDR_MAC_START + 12
 ;
 ; arp layer frame fields (offsets into frame)
 ;
+RFifo.ADDR_MAC_LEN    equ ADDR_MAC_START + 14
 ADDR_ARP_START  equ RFifo.ADDR_MAC_LEN
 
 RFifo.ADDR_ARP_HARDTYPE           equ ADDR_ARP_START + 0
@@ -372,7 +376,7 @@ Check_L3:
     ldi.W   RFifo.ADDR_IP_HDR_LENGTH    ; starting address
     sta.W   Regs.StartAddress
     lda.B   RFifo.ADDR_IP_HDR_LENGTH    ; length (32bit words) w/ version #
-    rotli.B 4
+    rotli.W 4
     rotri.W 1                           ; # of bytes to sum
     add.W  RFifo.ADDR_IP_HDR_LENGTH    ; ending address
     sta.W   Regs.EndAddress
